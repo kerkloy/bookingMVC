@@ -48,8 +48,8 @@
         </li>
 
         <li class="nav-item">
-        <a href="#">
-            <i class="fas fa-users"></i>
+        <a href="{{route('about-us')}}">
+            <i class="fas fa-info-circle"></i>
             <p>Edit About Us</p>
         </a>
         </li>

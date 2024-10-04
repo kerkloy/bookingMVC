@@ -33,6 +33,21 @@
       });
     </script>
 
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+
+    <!-- Axios -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="../admin/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../admin/css/plugins.min.css" />
@@ -50,8 +65,6 @@
                     @include('layouts.admin-nav')
                     @yield('content')
                 </div>
-            
-            @yield('scripts')
         </div>
     </div>
 
@@ -77,6 +90,9 @@
 
     <!-- Datatables -->
     <script src="../admin/js/plugin/datatables/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
 
     <!-- Bootstrap Notify -->
     <script src="../admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
