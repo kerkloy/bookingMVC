@@ -88,7 +88,7 @@
                                 <div class="form-group row required">
                                     <label for="img" class="form-control-label col-md-3 col-12 attachment">Image</label>
                                     <div class="col-md-9 col-12">
-                                        <input id="img" name="attachment[]" placeholder="Select image" maxlength="100" type="file" accept=".jpg,.jpeg,.png,.pdf" class="form-control file-loading" multiple/>
+                                        <input id="img" name="attachment[]" placeholder="Select image" maxlength="100" type="file" accept=".jpg,.jpeg,.png" class="form-control file-loading" multiple/>
                                     </div>
                                 </div>
                             </div>

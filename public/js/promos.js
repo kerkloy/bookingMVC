@@ -3,6 +3,7 @@ $(document).ready(function() {
         info: false,
         paging: false,
         searching: false,
+        dom: 'Bfrtip',
         buttons: [
             {
                 text: 'Reload',
@@ -13,24 +14,44 @@ $(document).ready(function() {
             {
                 text: 'New',
                 action: function(e, dt, node, config) {
-                    window.location = 'createpo.html'; // Navigate to the new promo creation page
+                    window.location = 'promos/create'; // Navigate to the new promo creation page
                 } 
             },
         ],
-        // "ajax": {
-        //     "url": "/promos",
-        //     "type": "GET",
-        //     "dataSrc": function (json) {
-        //         return json.data;
-        //     }
-        // },
+        "ajax": function(data, callback, settings){
+            axios.get('/get-promos')
+            .then(function(response) {
+                console.log(response.data);
+
+                var promos = response.data.map(function(promos){
+                    return {
+                        PromoID: promos.promo_id,
+                        Title: promos.promo_header,
+                        PromoCreated: promos.latest_created_at,
+                        Action: '<button class="btn btn-primary btn-sm editPromo" data-id="' + promos.promo_id + '">Edit</button> ' +
+                                '<button class="btn btn-danger btn-sm deletePromo" data-id="' + promos.promo_id + '">Delete</button>'
+                    };
+                });
+                callback({
+                    data: promos
+                });
+            })
+            .catch(function(error) {
+                console.error('Error fetching promos:', error);
+            });
+        },
         "columns": [
-            { title: "PromoID"},
-            { title: "Title" },
-            { title: "Action", render: function(data, type, row) {
-                return '<button class="btn btn-primary btn-sm editPromo" data-id="' + row[0] + '">Edit</button> ' +
-                       '<button class="btn btn-danger btn-sm deletePromo" data-id="' + row[0] + '">Delete</button>';
-            }}
+            { data: 'PromoID', title: "PromoID"},
+            { data: 'Title', title: "Title" },
+            { data:'PromoCreated', title: "Promo Created" },
+            { data:'Action', title: "Action"}
         ],
+    });
+
+
+    $('#tablePromo').on('click', '.editPromo', function() {
+        var promoId = $(this).data('id');
+
+        window.location = 'promos/' + promoId; 
     });
 });

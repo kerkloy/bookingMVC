@@ -15,6 +15,7 @@
                                 <tr>
                                     <th>Promo ID</th>
                                     <th>Promo Title</th>
+                                    <th>Promo Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

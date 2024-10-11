@@ -18,4 +18,5 @@ Route::get('/about-us/images', [AboutUsController::class, 'getUploadedImages']);
 Route::post('/about-us/content', [App\Http\Controllers\AboutUsController::class, 'updateAboutUsContent']);
 Route::get('/about-us/get-content', [App\Http\Controllers\AboutUsController::class, 'getContent']);
 Route::resource('promos', PromosController::class)->names('promos');
+Route::get('/get-promos', [PromosController::class, 'getPromo']);
 

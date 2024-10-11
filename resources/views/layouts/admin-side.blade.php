@@ -54,15 +54,15 @@
         </a>
         </li>
         <li class="nav-item">
-        <a href="#">
-            <i class="fas fa-truck"></i>
+        <a href="{{route('promos.index')}}">
+            <i class="fas fa-cart-arrow-down"></i>
             <p>Add Promo</p>
         </a>
         </li>
         <li class="nav-item">
         <a href="#">
-            <i class="fas fa-tags"></i>
-            <p>Purchase Order</p>
+            <i class="fas fa-address-card"></i>
+            <p>Edit Contact-us</p>
         </a>
         </li>
         <li class="nav-item">
