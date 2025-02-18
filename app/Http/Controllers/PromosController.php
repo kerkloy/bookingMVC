@@ -43,6 +43,9 @@ class PromosController extends Controller
         $data = $request->all();
         $request->validate([
             'promoHeader' => 'required|string|max:255',
+            'promoType' => 'required|string|max:255',
+            'promoPrice' => 'required',
+            'promoLocation' => 'required|string|max:255',
             // 'description' => 'required|array|max:255',
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -57,6 +60,9 @@ class PromosController extends Controller
             for($i = 0; $i < count($data['lines']); $i++){
                 DB::table('promos')->insert([
                     'promo_id' => $pr_id,
+                    'promo_type' => $request->input('promoType'),
+                    'promo_price' => $request->input('promoPrice'),
+                    'promo_location' => $request->input('promoLocation'),
                     'promo_header' => $request->input('promoHeader'),
                     'description' =>$data['lines'][$i]['description'],
                     'image_url' => 'uploads/' . $fileName,
@@ -78,22 +84,16 @@ class PromosController extends Controller
         $data = DB::SELECT('SELECT * FROM promos WHERE promo_id = ' . $id);
         // dd($data);
         // return response()->json(['promo' => $data]);
+        // dd($data);
         return view('promos.add-promo', ['promo' => $data]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-       //
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
+    {  
+        // Validate the request
         $request->validate([
             'promoHeader' => 'required|string|max:255',
             'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -114,34 +114,9 @@ class PromosController extends Controller
             $imageUrl = $promo->image_url; // Use existing image if no new image is uploaded
         }
 
-        // Update promo header and image
-        DB::table('promos')->where('promo_id', $id)->update([
-            'promo_header' => $request->input('promoHeader'),
-            'image_url' => $imageUrl,
-            'updated_at' => now(),
-        ]);
-
-        // Update existing descriptions or insert new ones
-        $data = $request->all();
-        foreach ($data['lines'] as $line) {
-            DB::table('promos')->updateOrInsert(
-                ['promo_id' => $id, 'description' => $line['description']],
-                ['updated_at' => now()]
-            );
-        }
-
-        // Delete removed descriptions if any
-        if (isset($data['deleted'])) {
-            foreach ($data['deleted'] as $descriptionId) {
-                DB::table('promos')
-                    ->where('promo_id', $id)
-                    ->where('description', $descriptionId)
-                    ->delete();
-            }
-        }
-
         return response()->json(['message' => 'Promo updated successfully!']);
     }
+
 
 
     /**
@@ -149,7 +124,15 @@ class PromosController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $promo = DB::table('promos')->where('promo_id', $id)->first();
+
+        if (!$promo) {
+            return response()->json(['error' => 'Promo not found.'], 404);
+        }
+
+        DB::table('promos')->where('promo_id', $id)->delete();
+
+        return response()->json(['message' => 'Promo deleted successfully!']);
     }
 
     public function getPromo() {
@@ -161,6 +144,12 @@ class PromosController extends Controller
             FROM promos 
             GROUP BY promo_id
         ");
+        return response()->json($promos);
+    }
+
+    public function getAllPromoDetails() {
+        $promos = DB::select("SELECT * FROM promos");
+
         return response()->json($promos);
     }
     

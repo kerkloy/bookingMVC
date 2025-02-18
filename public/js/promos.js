@@ -28,7 +28,7 @@ $(document).ready(function() {
                         PromoID: promos.promo_id,
                         Title: promos.promo_header,
                         PromoCreated: promos.latest_created_at,
-                        Action: '<button class="btn btn-primary btn-sm editPromo" data-id="' + promos.promo_id + '">Edit</button> ' +
+                        Action: '<button class="btn btn-primary btn-sm editPromo" data-id="' + promos.promo_id + '">Show</button> ' +
                                 '<button class="btn btn-danger btn-sm deletePromo" data-id="' + promos.promo_id + '">Delete</button>'
                     };
                 });
@@ -54,4 +54,57 @@ $(document).ready(function() {
 
         window.location = 'promos/' + promoId; 
     });
+
+
+    $('#tablePromo').on('click', '.deletePromo', function() {
+        var promoId = $(this).data('id');
+    
+        // SweetAlert 1 confirmation dialog
+        swal({
+            title: 'Are you sure?',
+            text: "Do you really want to delete this promo? This action cannot be undone.",
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: "Cancel",
+                    value: false,
+                    visible: true,
+                    className: "btn btn-secondary"
+                },
+                confirm: {
+                    text: "Yes, delete it!",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-danger"
+                }
+            },
+            dangerMode: true
+        }).then((isConfirmed) => {
+            if (isConfirmed) {
+                // Perform the deletion if confirmed
+                axios.delete('/promos/' + promoId)
+                    .then(function(response) {
+                        // Show success message
+                        swal({
+                            title: 'Deleted!',
+                            text: 'The promo has been deleted.',
+                            icon: 'success'
+                        });
+                        // Reload the DataTable
+                        $('#tablePromo').DataTable().ajax.reload();
+                    })
+                    .catch(function(error) {
+                        // Show error message
+                        swal({
+                            title: 'Error!',
+                            text: 'An error occurred while deleting the promo.',
+                            icon: 'error'
+                        });
+                        console.error('Error deleting promo:', error);
+                    });
+            }
+        });
+    });
+    
+    
 });
