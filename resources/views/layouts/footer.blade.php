@@ -1,5 +1,5 @@
 <!-- footer -->
-<footer class="footer">
+<footer id="contactTab" class="footer">
     <div class="footer_top">
         <div class="container">
             <div class="row">
@@ -28,7 +28,7 @@
                             Navigation
                         </h3>
                         <ul>
-                            <li><a href="#">Home</a></li>
+                            <li><a href="{{route('welcome')}}">Home</a></li>
                             <li><a href="#">Rooms</a></li>
                             <li><a href="#">About</a></li>
                             <li><a href="#">News</a></li>

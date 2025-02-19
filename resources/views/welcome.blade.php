@@ -4,25 +4,69 @@
 <style>
     .about_thumb img {
         width: 100vh; /* Make image responsive */
-        height: 200px; /* Set fixed height */
+        height: 350px; /* Set fixed height */
         object-fit: cover; /* Crop to fit the space */
-        border-radius: 2px;
     }
-
-    /* .book_now {
-        display: block;
-        text-align: center;
-        margin-top: 10px;
-        padding: 8px;
-        background-color: #ff5a5f;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-    } */
-
     .book_now:hover {
         background-color: #e0494e;
     }
+
+    .single_offers {
+    width: 100%;
+    max-width: 350px; /* Adjust as needed */
+    height: 450px; /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.about_thumb {
+    width: 100%;
+    height: 350px; /* Fixed height for image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.priceP {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.listItems {
+    padding: 0;
+    margin: 10px 0;
+    text-align: left;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.book_now {
+    display: block;
+    text-align: center;
+    background-color: #ff5722;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.book_now:hover {
+    background-color: #e64a19;
+}
+
+
+    
 </style>
 <div class="slider_area">
     <div class="slider_active owl-carousel">
@@ -77,7 +121,7 @@
     </div>
 </div>
 
-<div class="about_area">
+<div id="aboutTab" class="about_area">
     <div class="container">
         <div class="row">
             <div class="col-xl-5 col-lg-5">
@@ -103,7 +147,7 @@
     </div>
 </div>
 
-<div class="offers_area">
+<div id="promosTab" class="offers_area">
     <div class="container">
         <div class="row">
             <div class="col-xl-12">

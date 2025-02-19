@@ -51,8 +51,7 @@
                         <input type="text" class="form-control" id="promoLocation" name="promoLocation" placeholder="Input Location"
                             value="{{ isset($promo[0]->promo_location) ? $promo[0]->promo_location : '' }}">
                         <br>
-
-                        <label for="descriptionInput">Add Description(s)</label>
+                        <label for="descriptionInput">Add Inclusion(s)</label>
                         <div class="input-group">
                             <input type="text" class="form-control desc" id="descriptionInput" placeholder="Enter description">
                             <div class="input-group-append">
@@ -71,7 +70,7 @@
                                 <table id="dataTable" class="table text-center table-bordered" style="width:100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Description</th>
+                                            <th>Inclusion</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -82,8 +81,37 @@
                                 </table>
                             </div>
                         </div>
-
-                        
+                        <br>
+                        <label for="exclusionInput">Add Exclusion(s)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control desc" id="exclusionInput" placeholder="Enter exclusions">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary custom-btn" id="addExclusion">
+                                    <span class="btn-label">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- Populate Exclusions if available -->
+                        <div class="card-body">
+                        <div class="table-responsive">
+                                <table id="exclusionTable" class="table text-center table-bordered" style="width:100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Exclusion</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="exBody" data-data="{{ isset($promo) ? json_encode( $promo) : ''}}">
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
                         <br>
                         <label for="img">Upload Promo Image</label>
                         <input id="img" type="file" accept=".jpg,.jpeg,.png" class="form-control file-loading" value="{{ isset($promo[0]->image_url) ? $promo[0]->image_url : '' }}">

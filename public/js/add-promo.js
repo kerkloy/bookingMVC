@@ -1,4 +1,5 @@
 var descriptionLists = [];
+var exclusionLists = [];
 var index = 0;
 // var description;
 
@@ -18,6 +19,7 @@ $(document).ready(function() {
         })
     }
     descTable();
+    exclusionTable();
 
 
     $('.btnSubmit').on('click', function(){
@@ -49,8 +51,18 @@ $(document).ready(function() {
         }
         $("#descriptionInput").val('');
         descTable();
+    });
 
-        console.log(descriptionLists);
+    $('#addExclusion').on('click', function() {
+        let exclusion = $("#exclusionInput").val();
+        if (exclusion !== "") {
+            exclusionLists.push({
+                index: index++,
+                exclusion: exclusion,
+                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteExclusion(${index})'>Delete</button>`});
+        }
+        $("#exclusionInput").val('');
+        exclusionTable();
     });
 
     function descTable() {
@@ -61,12 +73,24 @@ $(document).ready(function() {
             paging: false,
             searching: false,
             columns: [
-                { data: 'description', title: "Description" },
+                { data: 'description', title: "Inclusion" },
                 { data: 'Action', title: "Action" }
             ]
         });
+    }
 
-        console.log(descriptionLists);
+    function exclusionTable() {
+        $('#exclusionTable').DataTable().destroy();
+        $('#exclusionTable').DataTable({
+            info: false,
+            data: exclusionLists,
+            paging: false,
+            searching: false,
+            columns: [
+                { data: 'exclusion', title: "Exclusion" },
+                { data: 'Action', title: "Action" }
+            ]
+        });
     }
 
 
@@ -108,6 +132,10 @@ $(document).ready(function() {
         descriptionLists.forEach((description, index) => {
             formData.append(`lines[${index}][description]`, description.description);
         });
+
+        exclusionLists.forEach((exclusion, index) => {
+            formData.append(`exclusions[${index}][exclusion]`, exclusion.exclusion);
+        });
         axios.post('/promos', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -130,74 +158,79 @@ $(document).ready(function() {
         });
     }
 
-    function editPromo() {
-        const promoHeader = $('#promoHeader').val();
-        const promoType = $('#promoType').val();
-        const promoPrice = $('#promoPrice').val();
-        const promoLocation = $('#promoLocation').val();
-        const pID = $('#pID').val();
+    // function editPromo() {
+    //     const promoHeader = $('#promoHeader').val();
+    //     const promoType = $('#promoType').val();
+    //     const promoPrice = $('#promoPrice').val();
+    //     const promoLocation = $('#promoLocation').val();
+    //     const pID = $('#pID').val();
 
-        const imageFile = $('#img')[0].files[0];
-        const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
-        if (!promoHeader || descriptionLists.length === 0) {
-            swal({
-                title: 'Error',
-                text: 'Please fill all the required fields',
-                icon: 'error',
-                button: 'OK'
-            });
-            return;
-        }
+    //     const imageFile = $('#img')[0].files[0];
+    //     const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+    //     if (!promoHeader || descriptionLists.length === 0) {
+    //         swal({
+    //             title: 'Error',
+    //             text: 'Please fill all the required fields',
+    //             icon: 'error',
+    //             button: 'OK'
+    //         });
+    //         return;
+    //     }
     
-        // Check if the file size exceeds 2MB
-        if (imageFile == true && imageFile.size > maxFileSize) {
-            swal({
-                title: 'Error',
-                text: 'File size must be lower than 2MB',
-                icon: 'error',
-                button: 'OK'
-            });
-            return;
-        } else {
-            const formData = {
-                promoHeader : promoHeader ,
-                promoType: promoType,
-                promoPrice: promoPrice,
-                promoLocation: promoLocation ,
-                img: imageFile,
-                lines: descriptionLists.map((description) => ({
-                    description: description.description
-                }))
-            }
+    //     // Check if the file size exceeds 2MB
+    //     if (imageFile == true && imageFile.size > maxFileSize) {
+    //         swal({
+    //             title: 'Error',
+    //             text: 'File size must be lower than 2MB',
+    //             icon: 'error',
+    //             button: 'OK'
+    //         });
+    //         return;
+    //     } else {
+    //         const formData = {
+    //             promoHeader : promoHeader ,
+    //             promoType: promoType,
+    //             promoPrice: promoPrice,
+    //             promoLocation: promoLocation ,
+    //             img: imageFile,
+    //             lines: descriptionLists.map((description) => ({
+    //                 description: description.description
+    //             }))
+    //         }
 
-            // descriptionLists.forEach((description, index) => {
-            //     formData.append(`lines[${index}][description]`, description.description);
-            // });
+    //         // descriptionLists.forEach((description, index) => {
+    //         //     formData.append(`lines[${index}][description]`, description.description);
+    //         // });
             
-            // return console.log(formData);
-            axios.put(`/promos/${pID}`, formData)
-            .then(response => {
-                console.log(response);
-                swal({
-                    title: 'Success',
-                    text: 'Promo edited successfully!',
-                    icon: 'success',
-                    button: 'OK'
-                }).then((willReload) => {
-                    if (willReload) {
-                        window.location.reload();
-                    }
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                console.error('Error submitting promo:', error.response.data);
-            });
-        }
+    //         // return console.log(formData);
+    //         axios.put(`/promos/${pID}`, formData)
+    //         .then(response => {
+    //             console.log(response);
+    //             swal({
+    //                 title: 'Success',
+    //                 text: 'Promo edited successfully!',
+    //                 icon: 'success',
+    //                 button: 'OK'
+    //             }).then((willReload) => {
+    //                 if (willReload) {
+    //                     window.location.reload();
+    //                 }
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.error('Error submitting promo:', error.response.data);
+    //         });
+    //     }
         
-    }
+    // }
 
     function deleteDescription(index) {
+        descriptionLists.splice(index, 1);
+        descTable();
+    }
+
+    function deleteExclusion(index) {
         descriptionLists.splice(index, 1);
         descTable();
     }

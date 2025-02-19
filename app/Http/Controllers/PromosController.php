@@ -46,7 +46,6 @@ class PromosController extends Controller
             'promoType' => 'required|string|max:255',
             'promoPrice' => 'required',
             'promoLocation' => 'required|string|max:255',
-            // 'description' => 'required|array|max:255',
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         $promo_id = DB::select('SELECT MAX(promo_id) as pro FROM promos');
@@ -57,17 +56,28 @@ class PromosController extends Controller
             $fileName = time() . '.' . $request->file('img')->getClientOriginalExtension();
             $request->file('img')->move(public_path('uploads'), $fileName);
 
+            DB::table('promos')->insert([
+                'promo_id' => $pr_id,
+                'promo_type' => $request->input('promoType'),
+                'promo_price' => $request->input('promoPrice'),
+                'promo_location' => $request->input('promoLocation'),
+                'promo_header' => $request->input('promoHeader'),
+                'image_url' => 'uploads/' . $fileName,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             for($i = 0; $i < count($data['lines']); $i++){
-                DB::table('promos')->insert([
+                DB::table('promo_inclusions')->insert([
                     'promo_id' => $pr_id,
-                    'promo_type' => $request->input('promoType'),
-                    'promo_price' => $request->input('promoPrice'),
-                    'promo_location' => $request->input('promoLocation'),
-                    'promo_header' => $request->input('promoHeader'),
-                    'description' =>$data['lines'][$i]['description'],
-                    'image_url' => 'uploads/' . $fileName,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'inclusion' =>$data['lines'][$i]['description'],
+                ]);
+            }
+
+            for($j = 0; $j < count($data['exclusions']); $j++) {
+                DB::table('promo_exclusions')-> insert([
+                    'promo_id' => $pr_id,
+                    'exclusion' => $data['exclusions'][$j]['exclusion']
                 ]);
             }
             return response()->json(['message' => 'Promo created successfully!'], 201);
@@ -81,7 +91,7 @@ class PromosController extends Controller
      */
     public function show(string $id)
     {
-        $data = DB::SELECT('SELECT * FROM promos WHERE promo_id = ' . $id);
+        $data = DB::SELECT('SELECT DISTINCT * FROM promos as p INNER JOIN promo_exclusions as pe WHERE p.promo_id = ' . $id . ' AND pe.promo_id = ' . $id);
         // dd($data);
         // return response()->json(['promo' => $data]);
         // dd($data);
@@ -149,8 +159,24 @@ class PromosController extends Controller
 
     public function getAllPromoDetails() {
         $promos = DB::select("SELECT * FROM promos");
-
-        return response()->json($promos);
+        $inclusions = DB::select("SELECT * FROM promo_inclusions");
+        $exclusions = DB::select("SELECT * FROM promo_exclusions");
+    
+        $groupedPromos = [];
+    
+        foreach ($promos as $promo) {
+            $promoId = $promo->promo_id;
+            $groupedPromos[$promoId] = (array) $promo;
+            $groupedPromos[$promoId]['inclusions'] = [];
+            $groupedPromos[$promoId]['exclusions'] = [];
+        }
+        foreach ($inclusions as $inclusion) {
+            $groupedPromos[$inclusion->promo_id]['inclusions'][] = $inclusion->inclusion;
+        }
+        foreach ($exclusions as $exclusion) {
+            $groupedPromos[$exclusion->promo_id]['exclusions'][] = $exclusion->exclusion;
+        }
+        return response()->json(array_values($groupedPromos));
     }
     
 }
