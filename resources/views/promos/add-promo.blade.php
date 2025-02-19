@@ -33,23 +33,23 @@
                 <div id="promoForm" enctype="multipart/form-data">
                 
                     <div class="form-group">
-                        <input type="text" class="d-none" id="pID" value="{{ isset($promo[0]->promo_id) ? $promo[0]->promo_id : '' }}">
+                        <input type="text" class="d-none" id="pID" value="{{ isset($promo['promo_id']) ? $promo['promo_id'] : '' }}">
                         <br>
                         <label for="promoHeader">Add Promo Header</label>
                         <input type="text" class="form-control" id="promoHeader" name="promoHeader" placeholder="Input Header"
-                            value="{{ isset($promo[0]->promo_header) ? $promo[0]->promo_header : '' }}">
+                            value="{{ isset($promo['promo_header']) ? $promo['promo_header'] : '' }}">
                         <br>
                         <label for="promoType">Promo Type</label>
                         <input type="text" class="form-control" id="promoType" name="promoType" placeholder="Promo type"
-                            value="{{ isset($promo[0]->promo_type) ? $promo[0]->promo_type : '' }}">
+                            value="{{ isset($promo['promo_type']) ? $promo['promo_type'] : '' }}">
                         <br>
                         <label for="promoPrice">Add Promo Price</label>
                         <input type="number" class="form-control" id="promoPrice" name="promoPrice" placeholder="Input Price"
-                            value="{{ isset($promo[0]->promo_price) ? $promo[0]->promo_price : '' }}">
+                            value="{{ isset($promo['promo_price']) ? $promo['promo_price'] : '' }}">
                         <br>
                         <label for="promoLocation">Add Promo Location</label>
                         <input type="text" class="form-control" id="promoLocation" name="promoLocation" placeholder="Input Location"
-                            value="{{ isset($promo[0]->promo_location) ? $promo[0]->promo_location : '' }}">
+                            value="{{ isset($promo['promo_location']) ? $promo['promo_location'] : '' }}">
                         <br>
                         <label for="descriptionInput">Add Inclusion(s)</label>
                         <div class="input-group">
@@ -118,8 +118,8 @@
                         <br>
 
                         <!-- Image Preview -->
-                        @if(isset($promo[0]->image_url))
-                            <img id="imagePreview" src="{{ asset($promo[0]->image_url) }}" width="100" height="100" />
+                        @if(isset($promo['image_url']))
+                            <img id="imagePreview" src="{{ asset($promo['image_url']) }}" width="100" height="100" />
                         @else
                             <img id="imagePreview" style="display:none;" width="100" height="100" />
                         @endif

@@ -5,20 +5,31 @@ var index = 0;
 
 
 $(document).ready(function() {
-    var arr = $('#dtBody').data('data');
-    console.log(arr);
+    const arr1 = $('#dtBody').data('data');
+    const arr2 = $('#exBody').data('data');
 
-    if(arr != '') {
-        arr.forEach(value => {
+    if(arr1['inclusions'] != '') {
+        arr1['inclusions'].forEach(value => {
             descriptionLists.push({
                 index : index,
-                description : value.description,
+                description : value,
                 Action :  ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${index})'>Delete</button>`
             });
             index++;
         })
     }
     descTable();
+
+    if(arr2['exclusions'] != '') {
+        arr2['exclusions'].forEach(value => {
+            exclusionLists.push({
+                index : index,
+                exclusion : value,
+                Action :  ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${index})'>Delete</button>`
+            });
+            index++;
+        })
+    }
     exclusionTable();
 
 

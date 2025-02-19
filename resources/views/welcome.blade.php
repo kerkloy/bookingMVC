@@ -160,14 +160,13 @@
             <div class="col-xl-4 col-md-4">
                 <div class="single_offers">
                     <div class="about_thumb">
-                        <img src="img/offers/1.png" alt="">
+                        <img src="" alt="">
                     </div>
-                    <h3>Up to 35% savings on Club <br>
-                        rooms and Suites</h3>
+                    <h3></h3>
                     <ul>
-                        <li>Luxaries condition</li>
-                        <li>3 Adults & 2 Children size</li>
-                        <li>Sea view side</li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
                     </ul>
                     <a href="#" class="book_now">book now</a>
                 </div>

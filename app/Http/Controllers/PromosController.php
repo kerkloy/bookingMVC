@@ -91,8 +91,26 @@ class PromosController extends Controller
      */
     public function show(string $id)
     {
-        $data = DB::SELECT('SELECT DISTINCT * FROM promos as p INNER JOIN promo_exclusions as pe WHERE p.promo_id = ' . $id . ' AND pe.promo_id = ' . $id);
-        // dd($data);
+        // $data = DB::SELECT('SELECT DISTINCT * FROM promos as p INNER JOIN promo_exclusions as pe WHERE p.promo_id = ' . $id . ' AND pe.promo_id = ' . $id);
+        $promos = DB::SELECT('SELECT * FROM promos WHERE promo_id = ' . $id);
+        $inclusions = DB::SELECT('SELECT * FROM promo_inclusions WHERE promo_id =' .$id);
+        $exclusions = DB::SELECT('SELECT * FROM promo_exclusions WHERE promo_id =' .$id);
+
+        $data = [];
+
+        foreach ($promos as $promo) {
+            $data= (array) $promo;
+            $data['inclusions'] = [];
+            $data['exclusions'] = [];
+        }
+
+        foreach ($inclusions as $inclusion) {
+            $data['inclusions'][] = $inclusion->inclusion;
+        }
+        foreach($exclusions as $exclusion) {
+            $data['exclusions'][] = $exclusion->exclusion;
+        }
+        // dd($promos, $inclusions, $exclusions);
         // return response()->json(['promo' => $data]);
         // dd($data);
         return view('promos.add-promo', ['promo' => $data]);

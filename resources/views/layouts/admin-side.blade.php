@@ -3,13 +3,13 @@
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="dark">
     <a href="{{url('/home')}}" class="logo">
-        <div class="px-4 pt-5">
+        <div class="px-5 pt-5 pb-3">
         <img
-        src="../img/logo3.png"
+        src="../img/pta2.png"
         alt="navbar brand"
         class="navbar-brand"
-        height="150px"
-        width="150px"
+        height="100px"
+        width="100px"
         />
         </div>
         

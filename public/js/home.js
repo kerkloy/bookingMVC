@@ -64,7 +64,7 @@ $(document).ready(function() {
                     <h5>${promo_header}</h5>
                     
                     <p class="priceP"><strong>💰 Price Per Pax: ${promo_price}</strong></p>
-                    <ul class="listItems">
+                    <ul class="list-unstyled listItems">
                         <li><strong>✅ Inclusions:</strong></li>
                         ${formattedInclusions}
                         <li><strong>❌ Exclusions:</strong></li>

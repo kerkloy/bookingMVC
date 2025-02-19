@@ -101,7 +101,7 @@
     <script src="../admin/js/plugin/sweetalert/sweetalert.min.js"></script>
 
     <!-- Kaiadmin JS -->
-    <script src="../admin/js/kaiadmin.min.js"></script>
+    <!-- <script src="../admin/js/kaiadmin.min.js"></script> -->
 
     <!-- Navbar JS -->
      <script src="../admin/js/navbar.js"></script>
