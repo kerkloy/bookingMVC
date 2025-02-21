@@ -20,5 +20,6 @@ Route::get('/about-us/get-content', [App\Http\Controllers\AboutUsController::cla
 Route::resource('promos', PromosController::class)->names('promos');
 Route::get('/get-promos', [PromosController::class, 'getPromo']);
 Route::get('/all-promos', [PromosController::class, 'getAllPromoDetails']);
+Route::get('/promo-info/{id}', [PromosController::class, 'getPromoInfo']);
 
 

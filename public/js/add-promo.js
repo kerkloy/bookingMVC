@@ -1,36 +1,53 @@
 var descriptionLists = [];
 var exclusionLists = [];
-var index = 0;
+var itineraryLists = [];
+var indexIn = 0;
+var indexEx = 0;
+var indexIt = 0;
 // var description;
 
 
 $(document).ready(function() {
-    const arr1 = $('#dtBody').data('data');
-    const arr2 = $('#exBody').data('data');
+    const arr1 = $('#dtBody').data('data') || {};
+    const arr2 = $('#exBody').data('data') || {};
+    const arr3 = $('#itBody').data('data') || {};
 
-    if(arr1['inclusions'] != '') {
-        arr1['inclusions'].forEach(value => {
+    if (Array.isArray(arr1.inclusions)) {
+        arr1.inclusions.forEach(value => {
             descriptionLists.push({
-                index : index,
-                description : value,
-                Action :  ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${index})'>Delete</button>`
+                indexIn: indexIn,
+                description: value,
+                Action: `<button class='btn btn-sm btn-danger' onclick='deleteDescription(${indexIn})'>Delete</button>`
             });
-            index++;
-        })
+            indexIn++;
+        });
     }
     descTable();
 
-    if(arr2['exclusions'] != '') {
-        arr2['exclusions'].forEach(value => {
+    if (Array.isArray(arr2.exclusions)) {
+        arr2.exclusions.forEach(value => {
             exclusionLists.push({
-                index : index,
-                exclusion : value,
-                Action :  ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${index})'>Delete</button>`
+                indexEx: indexEx,
+                exclusion: value,
+                Action: `<button class='btn btn-sm btn-danger' onclick='deleteExclusion(${indexEx})'>Delete</button>`
             });
-            index++;
-        })
+            indexEx++;
+        });
     }
     exclusionTable();
+
+    if (Array.isArray(arr3.itineraries)) {
+        arr3.itineraries.forEach(value => {
+            itineraryLists.push({
+                indexIt: indexIt,
+                itinerary: value,
+                Action: `<button class='btn btn-sm btn-danger' onclick='deleteItinerary(${indexIt})'>Delete</button>`
+            });
+            indexIt ++;
+        });
+    }
+    itineraryTable();
+
 
 
     $('.btnSubmit').on('click', function(){
@@ -56,24 +73,42 @@ $(document).ready(function() {
         let description = $("#descriptionInput").val();
         if (description !== "") {
             descriptionLists.push({
-                index: index++,
+                indexIn: indexIn++,
                 description: description,
-                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${index})'>Delete</button>`});
+                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteDescription(${indexIn-1})'>Delete</button>`});
         }
         $("#descriptionInput").val('');
         descTable();
+
+        console.log(descriptionLists);
     });
 
     $('#addExclusion').on('click', function() {
         let exclusion = $("#exclusionInput").val();
         if (exclusion !== "") {
             exclusionLists.push({
-                index: index++,
+                indexEx: indexEx++,
                 exclusion: exclusion,
-                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteExclusion(${index})'>Delete</button>`});
+                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteExclusion(${indexEx-1})'>Delete</button>`});
         }
         $("#exclusionInput").val('');
         exclusionTable();
+
+        console.log(exclusionLists);
+    });
+
+    $('#addItinerary').on('click', function() {
+        let itinerary = $("#itineraryInput").val();
+        if (itinerary !== "") {
+            itineraryLists.push({
+                indexIt: indexIt++,
+                itinerary: itinerary,
+                Action : ` <button class='btn btn-sm btn-danger' onclick='deleteItinerary(${indexIt-1})'>Delete</button>`});
+        }
+        $("#itineraryInput").val('');
+        itineraryTable();
+
+        console.log(itineraryLists);
     });
 
     function descTable() {
@@ -99,6 +134,20 @@ $(document).ready(function() {
             searching: false,
             columns: [
                 { data: 'exclusion', title: "Exclusion" },
+                { data: 'Action', title: "Action" }
+            ]
+        });
+    }
+
+    function itineraryTable() {
+        $('#itineraryTable').DataTable().destroy();
+        $('#itineraryTable').DataTable({
+            info: false,
+            data: itineraryLists,
+            paging: false,
+            searching: false,
+            columns: [
+                { data: 'itinerary', title: "Itinerary" },
                 { data: 'Action', title: "Action" }
             ]
         });
@@ -140,12 +189,16 @@ $(document).ready(function() {
         formData.append('promoLocation', promoLocation);
         formData.append('img', imageFile);
 
-        descriptionLists.forEach((description, index) => {
-            formData.append(`lines[${index}][description]`, description.description);
+        descriptionLists.forEach((description, indexIn) => {
+            formData.append(`lines[${indexIn}][description]`, description.description);
         });
 
-        exclusionLists.forEach((exclusion, index) => {
-            formData.append(`exclusions[${index}][exclusion]`, exclusion.exclusion);
+        exclusionLists.forEach((exclusion, indexEx) => {
+            formData.append(`exclusions[${indexEx}][exclusion]`, exclusion.exclusion);
+        });
+
+        itineraryLists.forEach((itinerary, indexIt) => {
+            formData.append(`itineraries[${indexIt}][itinerary]`, itinerary.itinerary);
         });
         axios.post('/promos', formData, {
             headers: {
@@ -236,12 +289,29 @@ $(document).ready(function() {
         
     // }
 
-    function deleteDescription(index) {
-        descriptionLists.splice(index, 1);
+    function deleteDescription(indexIn) {
+        const itemIndex = descriptionLists.findIndex(item => item.indexIn === indexIn);
+        if (itemIndex !== -1) {  // Ensure the item exists
+            descriptionLists.splice(itemIndex, 1);
+        }
         descTable();
+        console.log(descriptionLists);
+    }
+    
+
+    function deleteExclusion(indexEx) {
+        const itemIndex = exclusionLists.findIndex(item => item.indexEx === indexEx);
+        if(itemIndex !== -1) { // Ensure the item exists
+        exclusionLists.splice(itemIndex, 1);
+        }
+        exclusionTable();
+        console.log(exclusionLists);
     }
 
-    function deleteExclusion(index) {
-        descriptionLists.splice(index, 1);
-        descTable();
+    function deleteItinerary(indexIt) {
+        const itemIndex = itineraryLists.findIndex(item => item.indexIt === indexIt);
+        if(itemIndex!== -1) { // Ensure the item exists
+        itineraryLists.splice(itemIndex, 1);
+        }
+        itineraryTable();
     }

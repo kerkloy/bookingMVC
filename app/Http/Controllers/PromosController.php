@@ -80,6 +80,13 @@ class PromosController extends Controller
                     'exclusion' => $data['exclusions'][$j]['exclusion']
                 ]);
             }
+
+            for($k = 0; $k < count($data['itineraries']); $k++) {
+                DB::table('promo_itinerary')-> insert([
+                    'promo_id' => $pr_id,
+                    'itinerary' => $data['itineraries'][$k]['itinerary']
+                ]);
+            }
             return response()->json(['message' => 'Promo created successfully!'], 201);
         }
 
@@ -95,6 +102,7 @@ class PromosController extends Controller
         $promos = DB::SELECT('SELECT * FROM promos WHERE promo_id = ' . $id);
         $inclusions = DB::SELECT('SELECT * FROM promo_inclusions WHERE promo_id =' .$id);
         $exclusions = DB::SELECT('SELECT * FROM promo_exclusions WHERE promo_id =' .$id);
+        $itineraries = DB::SELECT('SELECT * FROM promo_itinerary WHERE promo_id =' .$id);
 
         $data = [];
 
@@ -102,6 +110,7 @@ class PromosController extends Controller
             $data= (array) $promo;
             $data['inclusions'] = [];
             $data['exclusions'] = [];
+            $data['itineraries'] = [];
         }
 
         foreach ($inclusions as $inclusion) {
@@ -109,6 +118,9 @@ class PromosController extends Controller
         }
         foreach($exclusions as $exclusion) {
             $data['exclusions'][] = $exclusion->exclusion;
+        }
+        foreach($itineraries as $itinerary) {
+            $data['itineraries'][] = $itinerary->itinerary;
         }
         // dd($promos, $inclusions, $exclusions);
         // return response()->json(['promo' => $data]);
@@ -196,5 +208,47 @@ class PromosController extends Controller
         }
         return response()->json(array_values($groupedPromos));
     }
+
+    public function getPromoInfo($id) {
+        // Use prepared statements to prevent SQL injection
+        $promo = DB::select("SELECT * FROM promos WHERE promo_id = ?", [$id]);
+    
+        // Check if promo exists
+        if (empty($promo)) {
+            return response()->json(['error' => 'Promo not found.'], 404);
+        }
+    
+        // Fetch related data
+        $inclusions = DB::select("SELECT * FROM promo_inclusions WHERE promo_id = ?", [$id]);
+        $exclusions = DB::select("SELECT * FROM promo_exclusions WHERE promo_id = ?", [$id]);
+        $itineraries = DB::select("SELECT * FROM promo_itinerary WHERE promo_id = ?", [$id]);
+    
+        // Convert promo object to array
+        $promoInfo = [];
+        foreach ($promo as $pr) {
+            $promoID = $pr->promo_id;
+            $promoInfo = (array) $pr;
+            $promoInfo[$promoID]['inclusions'] = [];
+            $promoInfo[$promoID]['exclusions'] = [];
+            $promoInfo[$promoID]['itineraries'] = [];
+        }
+    
+        // Append related data
+        foreach ($inclusions as $inclusion) {
+            $promoInfo[$id]['inclusions'][] = $inclusion->inclusion;
+        }
+        foreach ($exclusions as $exclusion) {
+            $promoInfo[$id]['exclusions'][] = $exclusion->exclusion;
+        }
+        foreach ($itineraries as $itinerary) {
+            $promoInfo[$id]['itineraries'][] = $itinerary->itinerary;
+        }
+
+        // dd($promoInfo);
+    
+        // Return view with data
+        return view('promos.view-promo', ['promoInfos' => $promoInfo]);
+    }
+    
     
 }

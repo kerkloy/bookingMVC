@@ -113,6 +113,37 @@
                             </div>
                         </div>
                         <br>
+                        <label for="itineraryInput">Add Itinerary(s)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control desc" id="itineraryInput" placeholder="Enter itinerary">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary custom-btn" id="addItinerary">
+                                    <span class="btn-label">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- Populate itinerary if available -->
+                        <div class="card-body">
+                        <div class="table-responsive">
+                                <table id="itineraryTable" class="table text-center table-bordered" style="width:100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Itinerary</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="itBody" data-data="{{ isset($promo) ? json_encode( $promo) : ''}}">
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <br>
                         <label for="img">Upload Promo Image</label>
                         <input id="img" type="file" accept=".jpg,.jpeg,.png" class="form-control file-loading" value="{{ isset($promo[0]->image_url) ? $promo[0]->image_url : '' }}">
                         <br>
